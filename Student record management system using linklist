@@ -1,0 +1,201 @@
+#include<iostream>
+using namespace std;
+class StudentRecord
+{
+	private:
+		int id;
+		string name;
+		float gpa;
+	public:
+		StudentRecord* next;
+		StudentRecord()
+		{
+			id=0;
+			gpa=0;
+			name="";
+		}
+		StudentRecord(int id, string n, float gpa)
+		{
+			this->gpa=gpa;
+			this->id=id;
+			this->name=n;
+			next=NULL;
+		}
+		void setID(int id)
+		{
+			this->id=id;
+		}
+		void setName(string name)
+		{
+			this->name=name;
+		}
+		void setGpa(int gpa)
+		{
+			this->gpa=gpa;
+		}
+		
+		int getId()
+		{
+			return id;
+		}
+		string getName()
+		{
+			return name;
+		}
+		float getGpa()
+		{
+			return gpa;
+		}
+};
+class students
+{
+	public:
+		StudentRecord *head;
+		students()
+		{
+			head=NULL;
+		}
+		void insert(int id, string name, float gpa)
+		{
+			StudentRecord* newdata=new StudentRecord(id,name,gpa);
+			if(head==NULL)
+			{
+				head=newdata;
+			}
+			else
+			{
+				StudentRecord *temp=head;
+				while(temp->next!=NULL)
+				{
+					temp=temp->next;
+				}
+				temp->next=newdata;
+			}
+		}
+		void print()
+		{
+			StudentRecord *curr=head;
+			while(curr!=NULL)
+			{
+			cout<<"name: "<<curr->getName()<<"  id: "<<curr->getId()<<"  gpa: "<<curr->getGpa()<<endl;
+			curr=curr->next;
+			}
+			cout<<endl;
+		}
+		void search(int Id)
+		{
+			StudentRecord *curr=head;
+			int j=0;
+			while (curr!=NULL)
+			{
+				if(curr->getId()==Id)
+				{
+					j=1;
+					break;
+				}
+				curr=curr->next;
+			}
+			if(j==1)
+			{
+				cout<<"student found"<<endl;
+				cout<<"name: "<<curr->getName()<<"  id: "<<curr->getId()<<"  gpa: "<<curr->getGpa()<<endl<<endl;
+			}
+			else
+			{
+				cout<<"student not found\n"<<endl;
+			}
+		}
+		void average()
+		{
+			float Average=0;
+			float count=0;
+			StudentRecord *curr=head;
+			while(curr!=NULL)
+			{
+				Average=Average+curr->getGpa();
+				curr=curr->next;
+				count++;
+			}
+			Average=Average/count;
+			cout<<"Average of all Students: "<<Average<<endl<<endl;
+		}
+		
+		void remove(int Id)
+		{
+			StudentRecord *curr=head;
+			StudentRecord *trash;
+			int j=0;
+			while (curr!=NULL)
+			{
+				if(curr->next->getId()==Id)
+				{
+					trash=curr->next;
+					curr->next=curr->next->next;
+					j=1;
+					delete trash;
+					break;
+				}
+				curr=curr->next;
+			}
+			if(j==1)
+			cout<<"Student Removed successfully"<<endl;
+			else
+			cout<<"Student not found"<<endl;
+		}
+};
+int main()
+{
+	int choice;
+	students* data=new students;
+	
+	cout<<"Welcome to Student management System"<<endl;
+	while(true)
+	{
+		cout<<"\n1. Add student\n2. Remove a Student\n3. Search for a student\n4. Display all student\n5. Calculate Average GPA\n6.Quit"<<endl<<endl;
+		cout<<"Enter your Choice: ";
+		cin>>choice;
+		if(choice==1)
+		{
+			int id;float gpa;string name;
+			cout<<"Enter student id: ";
+			cin>>id;
+			cout<<"Enter name: ";
+			cin>>name;
+			cout<<"Enter gpa: ";
+			cin>>gpa;
+			data->insert(id,name,gpa);
+			cout<<"Student added succesfully\n"<<endl;
+		}
+		else if(choice==2)
+		{
+			int id;
+			cout<<"Enter id to Remove: ";
+			cin>>id;
+			data->remove(id);
+		}
+		else if(choice==3)
+		{
+			int id;
+			cout<<"Enter student ID to search: ";
+			cin>>id;
+			data->search(id);
+		}
+		else if(choice==4)
+		{
+			cout<<"Student Records: "<<endl;
+			data->print();
+			cout<<endl;
+		}
+		else if(choice==5)
+		{
+			data->average();
+		}
+		else if(choice==6)
+		{
+			cout<<"Good bye"<<endl;
+			break;
+		}
+		else
+		cout<<"Illeggal choice"<<endl;
+	}
+}
